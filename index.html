@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>PokeList</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				var HTMLstr = "";  
+				for(var i = 1; i< 156; i++){
+					HTMLstr += '<div id="eachpic"><img id="'+[i]+'" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ [i] + '.png"></div>'; 
+
+				}
+
+				$('.wrap').append(HTMLstr); 
+				$('.wrap').on('click', "img", function() {
+					$('#dex').empty(); 
+					var Displayimg = $('<img />', {src    : this.src,
+                                 'class': 'fullImage'
+                   });
+        			$('#dex').append(Displayimg);
+					pokemon = $(this).attr('id'); 
+					$.get("https://pokeapi.co/api/v2/pokemon/"+ pokemon +"/", function(res){
+							 var name = res["name"];
+							 var height = res["height"];
+							 var weight = res['weight'];
+							 var type = "";
+							 for(var i = 0; i < res.types.length; i++){
+							 	type += '<li>'+ res["types"][i]["type"]["name"].toUpperCase() + '</li>';
+							 };
+
+        			$('#dex').append('<h1>'+ name.toUpperCase() +'</h1>');
+        			$('#dex').append('<p>Height</p>');
+        			$('#dex').append('<ul><li>'+ height +'</li></ul>');
+        			$('#dex').append('<p>Weight</p>');
+        			$('#dex').append('<ul><li>'+ weight +'</li></ul>');
+        			$('#dex').append('<p>Types</p>');
+        			$('#dex').append('<ul>'+ type +'</ul>');
+        			} ,"json");
+            	});
+            });
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="wrap">
+			</div>
+			<div id="dex">
+				
+			</div>
+		</div>
+	</body>
+</html>
